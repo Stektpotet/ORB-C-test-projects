@@ -19,13 +19,13 @@ if __name__ == '__main__':
     #     file.write(str(random.randint(0, 2)))
 
     # Setup and prepare the image to work on
-    img = data.astronaut().astype(np.float64)
+    img = data.hubble_deep_field().astype(np.float64)
 
 
 
     # img2 = tf.warp(img, tf.AffineTransform(scale=(1.3, 1.1), rotation=0.5,
     #                            translation=(0, -200)))
-    img2 = tf.warp(img, tf.ProjectiveTransform())
+    # img2 = tf.warp(img, tf.ProjectiveTransform())
     img2 = tf.warp(img, tf.AffineTransform(scale=(2, 2), rotation=0.5, translation=(-200, -400)))
     img_gray = color.rgb2gray(img)
     img_gray2 = color.rgb2gray(img2)
