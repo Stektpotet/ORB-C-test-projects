@@ -12,7 +12,7 @@ def prepare(im: np.ndarray):
 
 if __name__ == '__main__':
     #
-    # with open("orb-c_color_indices.txt", mode="w") as file:
+    # with open(orb-c_color_indices.txt", mode="w") as file:
     #     for _ in range(255):
     #         file.write(str(random.randint(0, 2)))
     #         file.write(' ')
