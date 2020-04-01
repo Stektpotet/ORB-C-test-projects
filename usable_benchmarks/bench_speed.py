@@ -45,6 +45,7 @@ if __name__ == '__main__':
 
     orb_times = []
     orb_c_times = []
+    slowdown_rate = []
 
     slowdown_cumulative = 0
     slowdown_average = 0
@@ -54,6 +55,7 @@ if __name__ == '__main__':
         orb_times.append(orb_time)
         orb_c_times.append(orb_c_time)
         slowdown = orb_c_time/orb_time
+        slowdown_rate.append(slowdown)
         slowdown_cumulative += slowdown
 
     slowdown_average = slowdown_cumulative / len(images)
@@ -70,6 +72,19 @@ if __name__ == '__main__':
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax.set_ylabel('Time (s)')
     ax.set_title('Speed comparison between ORB and ORB-c')
+    ax.set_xticks(x)
+    plt.xticks(rotation=90)
+    ax.set_xticklabels(image_names)
+    ax.legend()
+
+    fig.tight_layout()
+
+    fig, ax = plt.subplots()
+    bars = ax.bar(x - width / 2, slowdown_rate, width, label='Slowdown')
+
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_ylabel('Slowdown impact')
+    ax.set_title('Speed impact of ORB-c compared to ORB')
     ax.set_xticks(x)
     plt.xticks(rotation=90)
     ax.set_xticklabels(image_names)
