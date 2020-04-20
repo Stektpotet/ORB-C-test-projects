@@ -115,7 +115,7 @@ def _orb_c(img1: np.ndarray, img1_gray: np.ndarray, img2: np.ndarray, img2_gray:
                  img1,
                  transformed_src_points, keypoints2, point_correlation)
     ax[1].axis('off')
-    ax[1].set_title("Key1 -")
+    ax[1].set_title("CORRELATION")
 
     plt.show()
     print(f"ORB-c\nNumber of matches: {matches.shape[0]}\n"
@@ -134,7 +134,7 @@ def bench_valid_matches(img: np.ndarray, img2: np.ndarray, trs: np.ndarray):
 if __name__ == '__main__':
     validity_distance = 10
 
-    path = "../dataset/graffiti/"
+    path = "../dataset/bikes/"
     compare_nr = 2
 
     img = plt.imread(f"{path}img1.ppm")

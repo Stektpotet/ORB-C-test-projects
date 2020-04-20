@@ -81,7 +81,7 @@ def bench_valid_matches(img: np.ndarray, trs: tf.AffineTransform):
 
 if __name__ == '__main__':
     validity_distance = 100
-    img = data.stereo_motorcycle()[0].astype(np.float64)
+    img = data.chelsea().astype(np.float64)
     features = orb.ORB(n_keypoints=20)
 
     transform = tf.AffineTransform(scale=(1.2, 1.5), rotation=0.65, translation=(200, -260))

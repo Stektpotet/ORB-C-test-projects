@@ -21,7 +21,6 @@ if __name__ == '__main__':
     plt.xticks(rotation=35)
     ax.set_xticklabels(image_names)
     ax.legend()
-
     fig.tight_layout()
 
     plt.show()
