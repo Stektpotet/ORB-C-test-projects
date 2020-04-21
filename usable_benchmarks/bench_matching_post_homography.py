@@ -26,7 +26,7 @@ def _orb(img1: np.ndarray, img2: np.ndarray):
           f"Number of valid matches: {valid}\n"
           f"Number of invalid matches: {invalid}")
 
-    return matches, valid, invalid
+    return matches, valid, invalid, valid/matches, invalid/matches
 
 
 def _orb_match(orb, img1, img2, f1, f2):
@@ -81,7 +81,15 @@ def _orb_match(orb, img1, img2, f1, f2):
     return len(matches), len(valid_matches), len(invalid_matches)
 
 def _orb_c(img1: np.ndarray, img1_gray: np.ndarray, img2: np.ndarray, img2_gray: np.ndarray):
-
+    """
+    :param img1:
+    :param img1_gray:
+    :param img2:
+    :param img2_gray:
+    :return:
+        match_count, valid_match_count, invalid_match_count,
+        normalized_valid_match_count, normalized_invalid_match_count
+    """
     matches, valid, invalid = _orb_match(
         features, img1, img2,
         lambda orb: orb.detect_and_extract_multichannel(img1, img1_gray),
@@ -92,7 +100,7 @@ def _orb_c(img1: np.ndarray, img1_gray: np.ndarray, img2: np.ndarray, img2_gray:
           f"Number of valid matches: {valid}\n"
           f"Number of invalid matches: {invalid}")
 
-    return matches, valid, invalid
+    return matches, valid, invalid, valid/matches, invalid/matches
 
 
 def bench_valid_matches(img: np.ndarray, img2: np.ndarray, trs: np.ndarray):
@@ -107,20 +115,30 @@ def bench_valid_matches(img: np.ndarray, img2: np.ndarray, trs: np.ndarray):
 if __name__ == '__main__':
     validity_distance = 20
 
+    # variants = [
+    #     (0.8, 0.1, 0.1),
+    #     (0.1, 0.8, 0.1),
+    #     (0.1, 0.1, 0.8)
+    # ]
+    #
+    # for v in variants:
+    #     bench_prefix = f"r{v[0]*100:.0f}g{v[1]*100:.0f}b{v[2]*100:.0f}_"
+    #     features = orb.ORB(channel_weights=v)
+    #     ds = DataSet("Color sensitive", ["../dataset/bark/", "../dataset/trees/"])
+    #     ds.benchmark_plot(bench_valid_matches, bench_prefix)
+
+    bench_prefix = "AND_"
+
     features = orb.ORB()
     # features = orb.ORB(n_keypoints=2)
 
-    dataset = DataSet("Viewpoint Warp", ["../dataset/graffiti/", "../dataset/wall/"])
-    dataset.benchmark_plot(bench_valid_matches)
+    datasets =[
+        DataSet("Viewpoint Warp", ["../dataset/graffiti/", "../dataset/wall/"]),
+        DataSet("Blur", ["../dataset/bikes/", "../dataset/trees/"]),
+        DataSet("Zoom And Rotation", ["../dataset/bark/"]),  # boat is grayscale
+        DataSet("Light", ["../dataset/leuven/"]),
+        DataSet("JPEG Compression", ["../dataset/ubc/"])
+    ]
+    for ds in datasets:
+        ds.benchmark_plot(bench_valid_matches, bench_prefix)
 
-    dataset = DataSet("Blur", ["../dataset/bikes/", "../dataset/trees/"])
-    dataset.benchmark_plot(bench_valid_matches)
-
-    dataset = DataSet("Zoom And Rotation", ["../dataset/bark/"])  # boat is grayscale
-    dataset.benchmark_plot(bench_valid_matches)
-
-    dataset = DataSet("Light", ["../dataset/leuven/"])
-    dataset.benchmark_plot(bench_valid_matches)
-
-    dataset = DataSet("JPEG Compression", ["../dataset/ubc/"])
-    dataset.benchmark_plot(bench_valid_matches)
