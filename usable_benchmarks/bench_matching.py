@@ -175,17 +175,20 @@ def bench_channel_weighting():
     ]
 
     datasets = [
-        # DataSet("Viewpoint Warp", ["../dataset/graffiti/", "../dataset/wall/"]),
-        # DataSet("Blur", ["../dataset/bikes/", "../dataset/trees/"]),
+        DataSet("Viewpoint Warp", ["../dataset/graffiti/", "../dataset/wall/"]),
+        DataSet("Blur", ["../dataset/bikes/", "../dataset/trees/"]),
         DataSet("Zoom And Rotation", ["../dataset/bark/"]),  # boat is grayscale
-        # DataSet("Light", ["../dataset/leuven/"]),
-        # DataSet("JPEG Compression", ["../dataset/ubc/"])
+        DataSet("Light", ["../dataset/leuven/"]),
+        DataSet("JPEG Compression", ["../dataset/ubc/"])
     ]
+
+    if len(variants) > 10:
+        print("Benchmarking A LOT of variants - this WILL take a while!!!")
 
     for ds in datasets:
         for v in variants:
             bench_prefix = f"r{v[0]*100:.0f}g{v[1]*100:.0f}b{v[2]*100:.0f}_"
-            features = orb.ORB(channel_weights=v, n_keypoints=1000)
+            features = orb.ORB(channel_weights=v)
 
             ds.benchmark_plot(bench_valid_matches, bench_prefix, "channel_search/")
 
@@ -205,14 +208,25 @@ def bench_uniform():
     for ds in datasets:
         ds.benchmark_plot(bench_valid_matches, bench_prefix)
 
+
 if __name__ == '__main__':
     validity_distance = 20
 
-    bench_uniform()
-    # bench_channel_weighting()
+    # These are the two benchmarking functions
+    bench_uniform()             # Benchmark performance uniformly
 
-    # features = orb.ORB(channel_weights=(0.8, 0.1, 0.1))
+    # This has no effect if ORB-c uses another patch descriptor test (Variant 2 or 3)
+    bench_channel_weighting()   # Benchmark with channel weighting
+
+    # To benchmark the other variants of ORB-c patch descriptor test
+    # You have to go into the scikit-image skimage/feature/orb_cy.pyx
+    # and swap out the active binary descriptor test
+    # the three we've evaluated are present there - the unused ones are commented out
     #
+    #
+    # Additional benchmarks can be constructed as such:
+    #
+    # features = orb.ORB(channel_weights=(0.8, 0.1, 0.1), channel_weights_seed=42)
     # datasets =[
     #     DataSet("Viewpoint Warp", ["../dataset/graffiti/", "../dataset/wall/"]),
     #     DataSet("Blur", ["../dataset/bikes/", "../dataset/trees/"]),
@@ -222,5 +236,4 @@ if __name__ == '__main__':
     # ]
     #
     # for ds in datasets:
-    #     ds.benchmark_plot(bench_valid_matches)
-
+    #     ds.benchmark_plot(bench_valid_matches, bench_prefix="bench01", plot_path="some_benchmark/")

@@ -53,6 +53,8 @@ def _orb_match(orb, img1, img2, f1, f2):
     valid_matches = np.array(valid_matches)
     invalid_matches = np.array(invalid_matches)
 
+    # TO VIEW THE MATCHING PROCEDURE, UNCOMMENT THE FOLLOWING
+    #
     # fig, ax = plt.subplots(nrows=3, ncols=1, figsize=(6, 9))
     # plot_matches(ax[0],
     #              img1,
@@ -75,7 +77,6 @@ def _orb_match(orb, img1, img2, f1, f2):
     #              keypoints1, keypoints1, point_correlation)
     # ax[2].axis('off')
     # ax[2].set_title("Ideal Correlation")
-    #
     # plt.show()
 
     return len(matches), len(valid_matches), len(invalid_matches)
@@ -107,30 +108,15 @@ def bench_valid_matches(img: np.ndarray, img2: np.ndarray, trs: np.ndarray):
     img_gray = color.rgb2gray(img)
     img2 = tf.warp(img2, trs)
     img2_gray = color.rgb2gray(img2)
-    # TODO: Return a structure with names
     return [_orb(img_gray, img2_gray), _orb_c(img, img_gray, img2, img2_gray)]
-    # return [_orb_c(img, img_gray, img2, img2_gray)]
 
 
 if __name__ == '__main__':
     validity_distance = 20
 
-    # variants = [
-    #     (0.8, 0.1, 0.1),
-    #     (0.1, 0.8, 0.1),
-    #     (0.1, 0.1, 0.8)
-    # ]
-    #
-    # for v in variants:
-    #     bench_prefix = f"r{v[0]*100:.0f}g{v[1]*100:.0f}b{v[2]*100:.0f}_"
-    #     features = orb.ORB(channel_weights=v)
-    #     ds = DataSet("Color sensitive", ["../dataset/bark/", "../dataset/trees/"])
-    #     ds.benchmark_plot(bench_valid_matches, bench_prefix)
-
-    bench_prefix = "AND_"
+    bench_prefix = "post_homography"
 
     features = orb.ORB()
-    # features = orb.ORB(n_keypoints=2)
 
     datasets =[
         DataSet("Viewpoint Warp", ["../dataset/graffiti/", "../dataset/wall/"]),
