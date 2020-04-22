@@ -32,7 +32,7 @@ class DataSet:
             results.append(subset.benchmark(bench_func))
         return results
 
-    def benchmark_plot(self, bench_func, bench_prefix=""):
+    def benchmark_plot(self, bench_func, bench_prefix="", plot_path=""):
         VALID = 1
         INVALID = 2
         NRM_VALID = 3
@@ -113,5 +113,5 @@ class DataSet:
             ax.set_xlabel('Image variant')
             ax.set_title(f'{self.name}[#{i} - {subset.name}] Matches ORB vs ORB-c {f"({bench_prefix})" if bench_prefix else ""}')
             ax.legend()
-            plt.savefig(f"../plots/{bench_prefix}{self.name}_{i}_{subset.name}.png")
+            plt.savefig(f"../plots/{plot_path}{bench_prefix}{self.name}_{i}_{subset.name}.png")
             plt.show()
