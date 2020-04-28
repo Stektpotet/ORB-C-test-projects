@@ -226,7 +226,7 @@ if __name__ == '__main__':
     #
     # Additional benchmarks can be constructed as such:
     #
-    # features = orb.ORB(channel_weights=(0.8, 0.1, 0.1), channel_weights_seed=42)
+    # features = orb.ORB(channel_weights=(0.8, 0.1, 0.1), channel_weight_seed=42)
     # datasets =[
     #     DataSet("Viewpoint Warp", ["../dataset/graffiti/", "../dataset/wall/"]),
     #     DataSet("Blur", ["../dataset/bikes/", "../dataset/trees/"]),
